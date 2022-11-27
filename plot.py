@@ -29,16 +29,16 @@ def auto_sphere(image_file):
     sphere_actor = tvtk.Actor(mapper=sphere_mapper)
     fig.scene.add_actor(sphere_actor)
 
-    # K = 20
-    # xx = np.arange(0, K, 1)
-    # yy = np.arange(0, K, 1)
-    #
-    # x, y = np.meshgrid(xx, yy)
-    # x, y = x.flatten(), y.flatten()
-    # z = np.zeros(K * K)
-    #
-    # nodes = mlab.points3d(x, y, z, scale_factor=0.05)
-    # nodes.glyph.scale_mode = 'scale_by_vector'
+    K = 20
+    xx = np.arange(0, K, 1)
+    yy = np.arange(0, K, 1)
+
+    x, y = np.meshgrid(xx, yy)
+    x, y = x.flatten(), y.flatten()
+    z = np.zeros(K * K)
+
+    nodes = mlab.points3d(x, y, z, scale_factor=0.05)
+    nodes.glyph.scale_mode = 'scale_by_vector'
     for i in range(1000):
         x,y,z = sample_spherical(1)
         sx, sy, sz = .05,.05,.05
