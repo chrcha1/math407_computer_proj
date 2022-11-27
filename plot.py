@@ -7,39 +7,27 @@ def pack_rgb(r, g, b):
     return rgb
 
 def auto_sphere(image_file):
-    # create a figure window (and scene)
-    fig = mlab.figure(size=(600, 600))
+    img = tvtk.JPEGReader()
+    img.file_name = "blue_marble_spherical.jpg"
+    # map the texture
+    texture = tvtk.Texture(input_connection=img.output_port, interpolate=0)
 
-    # load and map the texture
-    # img = tvtk.JPEGReader()
-    # img.file_name = image_file
-    # texture = tvtk.Texture(input_connection=img.output_port, interpolate=1)
-    # (interpolate for a less raster appearance when zoomed in)
-
-    # use a TexturedSphereSource, a.k.a. getting our hands dirty
+    # make the sphere
     R = 1
     Nrad = 180
 
-    # create the sphere source with a given radius and angular resolution
+    # create the sphere
     sphere = tvtk.TexturedSphereSource(radius=R, theta_resolution=Nrad,
                                        phi_resolution=Nrad)
-
-    # assemble rest of the pipeline, assign texture
+    # assembly required
     sphere_mapper = tvtk.PolyDataMapper(input_connection=sphere.output_port)
-    sphere_actor = tvtk.Actor(mapper=sphere_mapper)
+    sphere_actor = tvtk.Actor(mapper=sphere_mapper, texture=texture)
+    # plot
+    mlab.clf()
+    fig = mlab.figure(size=(800, 600), bgcolor=(1, 1, 1))
     fig.scene.add_actor(sphere_actor)
 
-    K = 20
-    xx = np.arange(0, K, 1)
-    yy = np.arange(0, K, 1)
-
-    x, y = np.meshgrid(xx, yy)
-    x, y = x.flatten(), y.flatten()
-    z = np.zeros(K * K)
-
-    nodes = mlab.points3d(x, y, z, scale_factor=0.05)
-    nodes.glyph.scale_mode = 'scale_by_vector'
-    for i in range(1000):
+    for i in range(50):
         x,y,z = sample_spherical(1)
         sx, sy, sz = .05,.05,.05
         colors = [pack_rgb(0, 255, 0) for _ in range(10)]
