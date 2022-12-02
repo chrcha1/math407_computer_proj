@@ -27,7 +27,7 @@ def auto_sphere(image_file):
     fig = mlab.figure(size=(800, 600), bgcolor=(1, 1, 1))
     fig.scene.add_actor(sphere_actor)
 
-    for i in range(50):
+    for i in range(1):
         x,y,z = sample_spherical(1)
         sx, sy, sz = .05,.05,.05
         colors = [pack_rgb(0, 255, 0) for _ in range(10)]
